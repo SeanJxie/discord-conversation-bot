@@ -25,7 +25,7 @@ INDICATOR = '!'
 INTERVAL = 1
 
 
-def get_msg():
+def get_msg() -> str:
     for _ in range(3):
         pyautogui.tripleClick(TARGET_M_POS[0], TARGET_M_POS[1])
 
@@ -36,7 +36,7 @@ def get_msg():
     return Tk().clipboard_get()
 
 
-def send_msg(text):
+def send_msg(text: str) -> None:
     keyboard.send("ENTER")  # Select chat bar
     keyboard.send("BACKSPACE")  # Remove newline
     keyboard.write(':smiling_imp: [')
@@ -45,7 +45,7 @@ def send_msg(text):
     keyboard.send("ENTER")  # Send
 
 
-def _extract(tag) -> (int, int):
+def _extract(tag: str) -> (int, int):
     # In the case of profiles of pro players, format is:
     # [<span class="Name"> OFFICIAL NAME </span> <span class="Name"> ACCOUNT NAME </span>]
     # So, to find the '>' for the ACCOUNT NAME, we reverse search, avoiding the '>' at the end by
@@ -56,7 +56,7 @@ def _extract(tag) -> (int, int):
     return idx1, idx2
 
 
-def rank_cmd(user):
+def rank_cmd(user: str) -> None:
     try:
         http_response_obj = urlopen(f"https://na.op.gg/summoner/userName={user}")  # Get HTML object
 
@@ -78,16 +78,16 @@ def rank_cmd(user):
         print("error")
 
 
-def roast_cmd():
+def roast_cmd() -> None:
     send_msg(choice(insults.flame_list))
 
 
-def end_cmd():
-    send_msg(f"Poof! I'm gone until I get started by the boy Sean! RUNTIME: {int(time.time() - sTime)} seconds")
+def end_cmd() -> None:
+    send_msg(f"Poof! I'm gone until I get started again! RUNTIME: {int(time.time() - sTime)} seconds")
     exit()
 
 
-def process_msg(text):
+def process_msg(text: str) -> None:
     if text[0] == '!':
         print(f"COMMAND MESSAGE: {text}")
         if text[1:5] == "rank":
@@ -98,7 +98,7 @@ def process_msg(text):
             end_cmd()
 
 
-def main():
+def main() -> None:
     while 1:
         if GetWindowText(GetForegroundWindow())[-7:] == "Discord":
             time.sleep(INTERVAL)
@@ -111,7 +111,9 @@ def main():
 if __name__ == '__main__':
     sTime = time.time()
 
+    # The call below only works with this file structure.
     subprocess.Popen(rf"C:\Users\{getpass.getuser()}\AppData\Local\Discord\Update.exe --processStart Discord.exe")
+
     time.sleep(5)
     send_msg("I'm here and ready to go!")
     main()

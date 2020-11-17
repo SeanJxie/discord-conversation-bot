@@ -10,6 +10,9 @@ import subprocess
 import getpass
 
 import time
+from random import choice
+
+from Automation import insults
 
 """
 
@@ -17,8 +20,7 @@ Discord bot idea for Discord conversations.
 
 """
 
-
-TARGET_M_POS = (2489, 1300)
+TARGET_M_POS = (2089, 1300)
 INDICATOR = '!'
 INTERVAL = 1
 
@@ -37,7 +39,9 @@ def get_msg():
 def send_msg(text):
     keyboard.send("ENTER")  # Select chat bar
     keyboard.send("BACKSPACE")  # Remove newline
+    keyboard.write(':smiling_imp: [')
     keyboard.write(text)  # Type
+    keyboard.write(']')
     keyboard.send("ENTER")  # Send
 
 
@@ -67,9 +71,20 @@ def rank_cmd(user):
 
         if rankTag[rankIdx1: rankIdx2] != '[':
             send_msg(f"{trueNameTag[nameIdx1: nameIdx2].strip()} is currently {rankTag[rankIdx1: rankIdx2].strip()}.")
+        else:
+            send_msg(f"The man ain't even a user you BOZO. At least in NA.")
 
     except AttributeError:
         print("error")
+
+
+def roast_cmd():
+    send_msg(choice(insults.flame_list))
+
+
+def end_cmd():
+    send_msg(f"Poof! I'm gone until I get started by the boy Sean! RUNTIME: {int(time.time() - sTime)} seconds")
+    exit()
 
 
 def process_msg(text):
@@ -77,6 +92,10 @@ def process_msg(text):
         print(f"COMMAND MESSAGE: {text}")
         if text[1:5] == "rank":
             rank_cmd(text[text.find(' ') + 1:])
+        elif text[1:6] == "roast":
+            roast_cmd()
+        elif text[1:4] == "end":
+            end_cmd()
 
 
 def main():
@@ -90,6 +109,11 @@ def main():
 
 
 if __name__ == '__main__':
+    sTime = time.time()
+
     subprocess.Popen(rf"C:\Users\{getpass.getuser()}\AppData\Local\Discord\Update.exe --processStart Discord.exe")
     time.sleep(5)
+    send_msg("I'm here and ready to go!")
     main()
+
+send_msg("Test")
